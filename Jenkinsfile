@@ -48,8 +48,7 @@ pipeline{
             }
             
         }
-        
-
+   
 
         stage('push'){
             agent any
@@ -58,7 +57,6 @@ pipeline{
                 sh "docker push 241071440556.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
             }
         }
-
 
 
     }
