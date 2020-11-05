@@ -43,7 +43,7 @@ pipeline{
             agent any
             steps{
                 sh "docker build -t demo ."
-                sh "docker tag 241071440556.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
+                sh "docker tag demo:latest 241071440556.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
             }
         }
     }
