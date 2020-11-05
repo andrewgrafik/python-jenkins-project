@@ -51,7 +51,7 @@ pipeline{
             agent any
             steps{
                 sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 241071440556.dkr.ecr.us-east-1.amazonaws.com"
-                sh "241071440556.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
+                sh "docker push 241071440556.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
             }
         }
     }
