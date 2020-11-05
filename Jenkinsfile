@@ -45,6 +45,18 @@ pipeline{
                 sh "docker build -t demo ."
                 sh "docker tag demo:latest 241071440556.dkr.ecr.us-east-1.amazonaws.com/demo:latest"
             }
+             
+          stage('push'){
+            agent any
+            steps{
+                sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 046402772087.dkr.ecr.us-east-1.amazonaws.com"
+                sh "docker push 046402772087.dkr.ecr.us-east-1.amazonaws.com/matt/handson-jenkins:latest"
+            }
+        }
+
+
+
+
         }
     }
 }
