@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: 046402772087.dkr.ecr.us-east-1.amazonaws.com/matt/jenkins-handson:latest
+        image: 241071440556.dkr.ecr.us-east-1.amazonaws.com/demo
         ports:
         - containerPort: 80
         envFrom:
