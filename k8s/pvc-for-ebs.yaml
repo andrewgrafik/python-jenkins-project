@@ -6,7 +6,6 @@ spec:
   storageClassName: manual
   accessModes:
   - ReadWriteMany
-  
   resources:
     requests:
       storage: 500Mi
