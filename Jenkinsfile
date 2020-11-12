@@ -93,7 +93,7 @@ pipeline{
                     if [ "$VolumeId" == '' ]
                     then
                         aws ec2 create-volume \
-                            --availability-zone --region us-east-2 us-east-2a \
+                            --availability-zone --region us-east-2 us-east-2b \
                             --volume-type gp2 \
                             --size 10 \
                             --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=k8s-python-mysql-app}]'
