@@ -118,22 +118,7 @@ pipeline{
                 '''
             }
         }
-            stage('create-ebs'){
-            agent any
-            steps{
-                sh '''
-                    VolumeId=$(aws ec2 describe-volumes --filters Name=tag:Name,Values="k8s-python-mysql-app" | grep VolumeId |cut -d '"' -f 4| head -n 1)  || true
-                    if [ "$VolumeId" == '' ]
-                    then
-                        aws ec2 create-volume \
-                            --availability-zone us-east-2a \
-                            --volume-type gp2 \
-                            --size 10 \
-                            --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=k8s-python-mysql-app}]'
-                    fi
-                '''
-            }
-        }
+            
 
 
 
