@@ -99,7 +99,7 @@ pipeline{
                             eksctl create cluster \
                                 --name matts-cluster2 \
                                 --version 1.18 \
-                                --region us-east-1 \
+                                --region us-east-2 \
                                 --nodegroup-name my-nodes \
                                 --node-type t2.small \
                                 --nodes 1 \
@@ -117,7 +117,6 @@ pipeline{
                 '''
             }
         }
-
 
     }
 }
