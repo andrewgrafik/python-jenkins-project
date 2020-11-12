@@ -84,42 +84,38 @@ pipeline{
             }
         }
         
-        stage('create-cluster'){
+       stage('create-ebs'){
             agent any
             steps{
                 sh '''
-                    #!/bin/sh
-                    running=$(sudo lsof -i:80) || true
-                    if [ "$running" != '' ]
+                    VolumeId=$(aws ec2 describe-volumes --filters Name=tag:Name,Values="k8s-python-mysql-app" | grep VolumeId |cut -d '"' -f 4| head -n 1)  || true
+                    if [ "$VolumeId" == '' ]
                     then
-                        docker-compose down
-                        exist="$(aws eks list-clusters | grep matts-cluster2)" || true
-                        existCloudformation= $(aws cloudformation list-stack | grep matts-cluster2)" || true
-                        if [ "$exist" == '' ]
-                        then
-                            eksctl create cluster \
-                                --name matts-cluster2 \
-                                --version 1.18 \
-                                --region us-east-2 \
-                                --nodegroup-name my-nodes \
-                                --node-type t2.small \
-                                --nodes 1 \
-                                --nodes-min 1 \
-                                --nodes-max 2 \
-                                --ssh-access \
-                                --ssh-public-key  mattsJenkinsKey3_public.pem \
-                                --managed
-                        else
-                            echo 'no need to create cluster...'
-                        fi
-                    else
-                        echo 'app is not running with docker-compose up -d'
+                        aws ec2 create-volume \
+                            --availability-zone us-east-2a \
+                            --volume-type gp2 \
+                            --size 10 \
+                            --tag-specifications 'ResourceType=volume,Tags=[{Key=Name,Value=k8s-python-mysql-app}]'
+                        
                     fi
                 '''
             }
         }
-            
-
+                 stage('apply-k8s'){
+            agent any
+            steps{
+                script {
+                    env.EBS_VOLUME_ID = sh(script:"aws ec2 describe-volumes --filters Name=tag:Name,Values='k8s-python-mysql-app' | grep VolumeId |cut -d '\"' -f 4| head -n 1", returnStdout: true).trim()
+                }
+                sh "sed -i 's/{{EBS_VOLUME_ID}}/$EBS_VOLUME_ID/g' k8s/pv-ebs.yaml"
+                sh "kubectl apply -f k8s"                
+            }
+            post {
+                failure {
+                    sh "kubectl delete -f k8s"
+                }
+            }
+        }
 
 
 
